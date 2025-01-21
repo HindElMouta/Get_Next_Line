@@ -12,6 +12,7 @@
 
 #include "get_next_line.h"
 
+//Cette fonction sert a concatene 2 element,la chaine renvoye est alloue a l'exterieur de la memoire de travaille
 char	*ft_strjoin(char const *s1, char const *s2)
 {
 	char	*joined_str;
@@ -22,11 +23,11 @@ char	*ft_strjoin(char const *s1, char const *s2)
 
 	if (!s1 || !s2)
 		return (NULL);
-	len1 = ft_strlen(s1);
-	len2 = ft_strlen(s2);
-	joined_str = (char *)malloc((len1 + len2 + 1) * sizeof(char));
+	len1 = ft_strlen(s1); //calcule de la premire ligne 
+	len2 = ft_strlen(s2); //calcule de la 2em ligne 
+	joined_str = (char *)malloc((len1 + len2 + 1) * sizeof(char)); // j'alloue de l'espace avc malloc 
 	if (!joined_str)
-		return (NULL);
+		return (NULL); // si la location echou elle envoi NULL
 	i = -1;
 	while (i++, i < len1)
 		joined_str[i] = s1[i];
@@ -36,7 +37,8 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	joined_str[i + j] = '\0';
 	return (joined_str);
 }
-
+	
+//Cette fonction recherche la premiere occurence passe dans le 2eme parametre de char specifie en param
 char	*ft_strchr(const char *s, int c)
 {
 	char	*str;
@@ -50,15 +52,20 @@ char	*ft_strchr(const char *s, int c)
 		return (NULL);
 }
 
+//La fonction bzero () doit placer n octets de valeur zéro dans la zone pointée par s.
 void	ft_bzero(void *s, size_t n)
 {
 	size_t	i;
 
-	i = -1;
-	while (i ++, i < n)
-		((unsigned char *)s)[i] = '\0';
+	i = 0;
+	while (i < n)
+	{
+		*(unsigned char *)(s + i) = '0';
+		i ++;
 }
-
+	}
+		
+//Cette fonction alloue un bloc de mémoire en initialisant tous ces octets à la valeur 0.
 void	*ft_calloc(size_t nmemb, size_t size)
 {
 	int		c;
@@ -86,6 +93,7 @@ void	*ft_calloc(size_t nmemb, size_t size)
 	return (ptr);
 }
 
+//Elle permet de calculer la longuer exprimee en nombre de char 
 size_t	ft_strlen(const char *str)
 {
 	int	i;
