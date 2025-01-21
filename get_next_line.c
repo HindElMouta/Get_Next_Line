@@ -111,9 +111,9 @@ char	*read_file(int fd, char *b_static, ssize_t byte_read)
 // Fonction principale qui retourne la ligne suivante du fichier
 char	*get_next_line(int fd)
 {
-	char					*line;
-	static char			*b_static;
-	ssize_t	byte_read;
+	char			*line;
+	static char		*b_static;
+	ssize_t			byte_read;
 
 	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0) // Vérifie si le descripteur de fichier est valide et si la lecture est possible
 		return (free(b_static), b_static = NULL, NULL);
