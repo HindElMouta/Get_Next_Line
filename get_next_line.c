@@ -143,7 +143,7 @@ char    *get_next_line(int fd)
     return (line);
 }
 
-
+/*
 #include <stdio.h>
 #include <fcntl.h>
 int main(void)
@@ -182,3 +182,4 @@ int main(void)
 
     return (0);
 }
+*/
