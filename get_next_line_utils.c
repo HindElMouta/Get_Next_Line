@@ -24,8 +24,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		return (NULL); // Vérifie si l'une des chaînes est NULL
 	len1 = ft_strlen(s1); // Longueur de la première chaîne
 	len2 = ft_strlen(s2); // Longueur de la deuxième chaîne
-	joined_str = (char *)malloc((len1 + len2 + 1) * sizeof(char));
-		// Alloue de la mémoire pour les deux chaînes plus '\0'
+	joined_str = (char *)malloc((len1 + len2 + 1) * sizeof(char)); // Alloue de la mémoire pour les deux chaînes plus '\0'
 	if (!joined_str)
 		return (NULL); // Si l'allocation échoue, retourne NULL
 	i = 0;
@@ -65,7 +64,7 @@ void	ft_bzero(void *s, size_t n)
 	i = 0;
 	while (i < n) // Remplir les n premiers octets de s avec 0
 	{
-		*(unsigned char *)(s + i) = '0'; // Cast et mettre à zéro
+		*(unsigned char *)(s + i) = 0; // Cast et mettre à zéro
 		i++;
 	}
 }
