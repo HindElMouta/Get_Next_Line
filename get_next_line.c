@@ -161,7 +161,7 @@ int main(void)
 
     i = 0;
     while (i < 3)
-    {
+    {²
         // Lit une ligne de chaque fichier et l'affiche
         line = get_next_line(fd1);
         printf("line [%02d]: %s", i, line);
