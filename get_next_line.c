@@ -26,7 +26,7 @@ char	*ft_join_and_free(char *var_static, char *var_temp)
 		if (!var_static)
 			return (free(var_temp), NULL);
 	}
-	temp = ft_strjoin(var_static, var_temp);
+	temp = ft_strjoin(var_static, var_temp); //je concatele les 2 variable
 	free(var_static);
 	if (!temp)
 		return (free(var_temp), NULL); // Libère var_temp en cas d'échec d'allocation
@@ -161,7 +161,7 @@ int main(void)
 
     i = 0;
     while (i < 3)
-    {²
+    {
         // Lit une ligne de chaque fichier et l'affiche
         line = get_next_line(fd1);
         printf("line [%02d]: %s", i, line);
