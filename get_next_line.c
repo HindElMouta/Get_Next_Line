@@ -18,19 +18,14 @@ char	*ft_join_and_free(char *var_static, char *var_temp)
 {
 	char	*temp;
 
-	if (!var_temp) // Vérifie si var_temp est NULL avant de faire quoi que ce soit
+	if (!var_temp) 
 		return (free(var_static), NULL);
-	if (!var_static) // Si var_static est NULL, on l'initialise à une chaîne vide pour éviter des erreurs
-	{
-		var_static = ft_calloc(1, 1);
-		if (!var_static)
-			return (free(var_temp), NULL);
-	}
+	else if (!var_static) // l'initialise à une chaîne vide
+		return (NULL);
 	temp = ft_strjoin(var_static, var_temp); //je concatele les 2 variable
-	free(var_static);
 	if (!temp)
-		return (free(var_temp), NULL); // Libère var_temp en cas d'échec d'allocation
-	return (temp);
+		return (free(var_static), NULL); // Libère buffer en cas d'échec d'allocation
+	return (free(var_static), temp);
 }
 
 // Fonction qui supprime la première ligne de var_static et retourne le reste
@@ -40,22 +35,22 @@ char	*ft_next(char *var_static)
 	int		j;
 	char	*line;
 
-	if (!var_static) // Si var_static est NULL, il n'y a rien à traiter, on retourne NULL
+	if (!var_static) 
 		return (NULL);
 	i = 0;
-	while (var_static[i] && var_static[i] != '\n') // Trouve l'indice du caractère '\n' ou la fin de la chaîne
+	while (var_static[i] && var_static[i] != '\n') // Trouve l'indice du caractère '\n' 
 		i++;
 	if (!var_static[i]) // Si il n'y a pas de '\n' dans var_static, on libère et retourne NULL
 		return (free(var_static), NULL);
-	line = ft_calloc((ft_strlen(var_static) - i + 2), sizeof(char)); // On alloue de la mémoire pour la nouvelle ligne contenant le reste de var_static après '\n'
-	if (!line) // Si l'allocation échoue, on libère var_static et retourne NULL
+	line = ft_calloc((ft_strlen(var_static) - i + 2), sizeof(char)); // On alloue de la mémoire pour la new
+	if (!line)
 		return (free(var_static), NULL);
 	i++; // Incrémente i pour passer le caractère '\n'
 	j = 0;
 	while (var_static[i]) // Copie le reste de var_static dans line
 		line[j++] = var_static[i++];
-	free(var_static); // Libère la mémoire de var_static car on a extrait son contenu
-	return (line); // Retourne la chaîne contenant le reste de var_static
+	free(var_static); // Libère la mémoire car on a extrait son contenu
+	return (line); // Retourne le reste de var_static
 }
 
 // Fonction qui extrait la première ligne de var_static
@@ -65,12 +60,12 @@ char	*ft_line(char *var_static)
 	int		i;
 
 	i = 0;
-	if (!var_static[i]) // Si var_static est vide, il n'y a rien à extraire, on retourne NULL
+	if (!var_static[i]) 
 		return (NULL);
-	while (var_static[i] && var_static[i] != '\n') // Recherche le caractère '\n' dans var_static pour déterminer la fin de la ligne
+	while (var_static[i] && var_static[i] != '\n') // Recherche le caractère '\n' dans var_static
 		i++;
 	line = ft_calloc(sizeof(char), i + 2); // Alloue de la mémoire pour la ligne extraite (en incluant le '\n' si présent)
-	if (!line) // Si l'allocation échoue, on libère la mémoire et retourne NULL
+	if (!line)
 		return (free(line), free(var_static), NULL);
 	i = 0;
 	while (var_static[i] && var_static[i] != '\n') // Copie le contenu de var_static dans line jusqu'à '\n'
@@ -84,66 +79,55 @@ char	*ft_line(char *var_static)
 }
 
 // Fonction qui lit le fichier et remplit var_static avec le contenu lu
-char	*read_file(int fd, char *var_static)
+char	*read_file(int fd, char *var_static, ssize_t	byte_read)
 {
 	char	*var_temp;
-	ssize_t	byte_read;
-
-	if (!var_static)
+	
+	if (!var_static) // Si var_static est NULL, on l'initialise à une chaîne vide
 	{
-		var_static = ft_calloc(1, 1);
+		var_static = ft_calloc(1, 1); // Alloue un seul octet initialisé à '\0'
 		if (!var_static)
 			return (NULL);
 	}
-	var_temp = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
+	var_temp = ft_calloc(BUFFER_SIZE + 1, sizeof(char)); // Allocation de mémoire pour le buffer temporaire +1 pour le '\0'
 	if (!var_temp)
 		return (NULL);
-	byte_read = read(fd, var_temp, BUFFER_SIZE);
-	while (byte_read > 0)
+	while (byte_read > 0)// Boucle tant qu'on lit des données (byte_read > 0)
 	{
-		var_temp[byte_read] = '\0';
-		var_static = ft_join_and_free(var_static, var_temp);
-		if (ft_strchr(var_temp, '\n')) // Arrêt si un '\n' est trouvé
-			break;
-		byte_read = read(fd, var_temp, BUFFER_SIZE); // Mise à jour de byte_read
+		byte_read = read(fd, var_temp, BUFFER_SIZE);// Première lecture dans var_temp avant d'entrer dans la boucle
+		if (byte_read == -1 && !var_static)
+			return (free(var_temp), NULL);
+		var_temp[byte_read] = '\0'; // Ajoute un caractère de fin de chaîne
+		var_static = ft_join_and_free(var_static, var_temp); // Concatène et libère var_static
+		if (!var_static)
+			return (free(var_temp), NULL);
+		if (ft_strchr(var_temp, '\n')) // Vérifie si un saut de ligne est présent dans le buffer
+			break ; // On arrête la lecture dès qu'on trouve un '\n'
 	}
-	free(var_temp);
-	if (byte_read == -1) // Gestion d'erreur après la boucle
-		return (free(var_static), NULL);
-	return (var_static);
+	return (free(var_temp), var_static);// Retourne le contenu lu dans var_static
 }
+
 
 // Fonction principale qui retourne la ligne suivante du fichier
 char    *get_next_line(int fd)
 {
-    char            *line;
-    static char     *var_static;
+	static char	*var_static;
+	char		*line;
+	ssize_t		byte_read;
 
-    if (fd < 0 || BUFFER_SIZE <= 0)
-    {
-        free(var_static);
-        var_static = NULL;
-        return (NULL);
-    }
-    var_static = read_file(fd, var_static);
-    if (!var_static || !var_static[0])
-    {
-        free(var_static);
-        var_static = NULL;
-        return (NULL);
-    }
-    line = ft_line(var_static);
-    if (!line)
-    {
-        free(var_static);
-        var_static = NULL;
-        return (NULL);
-    }
-    var_static = ft_next(var_static);
-    return (line);
+	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
+		return (free(var_static), var_static = NULL, NULL);
+	byte_read = 1;
+	var_static = read_file(fd, var_static, byte_read);
+	if (!var_static || !var_static[0])
+		return (free(var_static), var_static = NULL, NULL);
+	line = ft_line(var_static);
+	if (!line)
+		return (free(var_static), var_static = NULL, NULL);
+	var_static = ft_next(var_static);
+	return (line);
 }
 
-/*
 #include <stdio.h>
 #include <fcntl.h>
 int main(void)
@@ -182,4 +166,3 @@ int main(void)
 
     return (0);
 }
-*/

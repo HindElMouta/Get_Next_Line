@@ -12,6 +12,17 @@
 
 #include "get_next_line.h"
 
+// Elle permet de calculer la longuer exprimee en nombre de char
+size_t	ft_strlen(const char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+		i++;
+	return (i);
+}
+
 //elle concatene 2 element,la char est alloue a l'exterieur de la memoire de travaille
 char	*ft_strjoin(char const *s1, char const *s2)
 {
@@ -21,24 +32,24 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	size_t	i;
 
 	if (!s1 || !s2)
-		return (NULL); // Vérifie si l'une des chaînes est NULL
-	len1 = ft_strlen(s1); // Longueur de la première chaîne
-	len2 = ft_strlen(s2); // Longueur de la deuxième chaîne
-	joined_str = (char *)malloc((len1 + len2 + 1) * sizeof(char)); // Alloue de la mémoire pour les deux chaînes plus '\0'
+		return (NULL); 
+	len1 = ft_strlen(s1);
+	len2 = ft_strlen(s2);
+	joined_str = (char *)malloc((len1 + len2 + 1) * sizeof(char));
 	if (!joined_str)
-		return (NULL); // Si l'allocation échoue, retourne NULL
+		return (NULL);
 	i = 0;
-	while (i < len1) // Copie les caractères de s1 dans joined_str
+	while (i < len1)
 	{
 		joined_str[i] = s1[i];
 		i++;
 	}
-	while (i < len1 + len2) // Copie les caractères de s2 dans joined_str
+	while (i < len1 + len2)
 	{
 		joined_str[i] = s2[i - len1];
 		i++;
 	}
-	joined_str[i] = '\0'; // Ajoute le caractère nul de fin de chaîne
+	joined_str[i] = '\0';
 	return (joined_str);
 }
 
@@ -48,14 +59,14 @@ char	*ft_strchr(const char *s, int c)
 	char	*str;
 
 	str = (char *)s;
-	while (*str != c && *str != 0) // Cherche jusqu'à trouver c ou '\0'
+	while (*str != c && *str != 0)
 		str++;
-	if (*str == c) // Si c est trouvé
+	if (*str == c)
 		return (str);
 	else
-		return (NULL); // Sinon retourne NULL
+		return (NULL);
 }
-
+/*
 // La fonction bzero () doit placer n octets de valeur zéro dans la zone pointée par s.
 void	ft_bzero(void *s, size_t n)
 {
@@ -68,7 +79,7 @@ void	ft_bzero(void *s, size_t n)
 		i++;
 	}
 }
-
+*/
 // Cette fonction alloue un bloc de mémoire en initialisant tous ces octets à la valeur 0.
 void	*ft_calloc(size_t nmemb, size_t size)
 {
@@ -81,7 +92,7 @@ void	*ft_calloc(size_t nmemb, size_t size)
 	size_m = ((size_t)(-1));
 	if (nmemb == 0 || size == 0)
 		return (malloc(0)); // Si nmemb ou size est 0, alloue 0 octet
-	if (nmemb && size > size_m / nmemb)
+	if (nmemb && size > size_m / nmemb) 
 		return (NULL); // Si multiplication déborde, retourne NULL
 	ptr = malloc(nmemb * size); // Alloue la mémoire
 	if (!ptr)
@@ -97,13 +108,3 @@ void	*ft_calloc(size_t nmemb, size_t size)
 	return (ptr);
 }
 
-// Elle permet de calculer la longuer exprimee en nombre de char
-size_t	ft_strlen(const char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i]) // Parcours la chaîne jusqu'au caractère nul
-		i++;
-	return (i); // Retourne la longueur de la chaîne
-}
