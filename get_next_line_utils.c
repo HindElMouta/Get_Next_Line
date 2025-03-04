@@ -23,7 +23,7 @@ size_t	ft_strlen(const char *str)
 	return (i);
 }
 
-//elle concatene 2 element,la char est alloue a l'exterieur de la memoire de travaille
+//concatene 2 element,et alloue a l'exterieur de la memoire
 char	*ft_strjoin(char const *s1, char const *s2)
 {
 	char	*joined_str;
@@ -32,7 +32,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	size_t	i;
 
 	if (!s1 || !s2)
-		return (NULL); 
+		return (NULL);
 	len1 = ft_strlen(s1);
 	len2 = ft_strlen(s2);
 	joined_str = (char *)malloc((len1 + len2 + 1) * sizeof(char));
@@ -53,7 +53,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	return (joined_str);
 }
 
-// Cette fonction recherche la premiere occurence passe dans le 2eme parametre de char specifie en param
+//recherche la 1er occurence passe dans le 2eme en param
 char	*ft_strchr(const char *s, int c)
 {
 	char	*str;
@@ -66,6 +66,8 @@ char	*ft_strchr(const char *s, int c)
 	else
 		return (NULL);
 }
+
+//alloue un bloc de mémoire en initialisant tous ces octets à la valeur 0.
 // Cette fonction alloue un bloc de mémoire en initialisant tous ces octets à la valeur 0.
 void	*ft_calloc(size_t nmemb, size_t size)
 {
@@ -77,16 +79,16 @@ void	*ft_calloc(size_t nmemb, size_t size)
 
 	size_m = ((size_t)(-1));
 	if (nmemb == 0 || size == 0)
-		return (malloc(0)); // Si nmemb ou size est 0, alloue 0 octet
-	if (nmemb && size > size_m / nmemb) 
-		return (NULL); // Si multiplication déborde, retourne NULL
-	ptr = malloc(nmemb * size); // Alloue la mémoire
+		return (malloc(0));
+	if (nmemb && size > size_m / nmemb)
+		return (NULL);
+	ptr = malloc(nmemb * size);
 	if (!ptr)
-		return (NULL); // Si malloc échoue, retourne NULL
+		return (NULL);
 	i = 0;
 	n = nmemb * size;
 	c = 0;
-	while (i < n) // Initialise tous les octets à 0
+	while (i < n)
 	{
 		((unsigned char *)ptr)[i] = (unsigned char)c;
 		i++;

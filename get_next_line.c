@@ -18,13 +18,13 @@ char	*ft_join_and_free(char *var_static, char *var_temp)
 {
 	char	*temp;
 
-	if (!var_temp) 
+	if (!var_temp)
 		return (free(var_static), NULL);
-	else if (!var_static) // l'initialise à une chaîne vide
+	else if (!var_static)
 		return (NULL);
-	temp = ft_strjoin(var_static, var_temp); //je concatele les 2 variable
+	temp = ft_strjoin(var_static, var_temp);
 	if (!temp)
-		return (free(var_static), NULL); // Libère buffer en cas d'échec d'allocation
+		return (free(var_static), NULL);
 	return (free(var_static), temp);
 }
 
@@ -35,22 +35,22 @@ char	*ft_next(char *var_static)
 	int		j;
 	char	*line;
 
-	if (!var_static) 
+	if (!var_static)
 		return (NULL);
 	i = 0;
-	while (var_static[i] && var_static[i] != '\n') // Trouve l'indice du caractère '\n' 
+	while (var_static[i] && var_static[i] != '\n')
 		i++;
-	if (!var_static[i]) // Si il n'y a pas de '\n' dans var_static, on libère et retourne NULL
+	if (!var_static[i])
 		return (free(var_static), NULL);
-	line = ft_calloc((ft_strlen(var_static) - i + 2), sizeof(char)); // On alloue de la mémoire pour la new
+	line = ft_calloc((ft_strlen(var_static) - i + 2), sizeof(char));
 	if (!line)
 		return (free(var_static), NULL);
-	i++; // Incrémente i pour passer le caractère '\n'
+	i++;
 	j = 0;
-	while (var_static[i]) // Copie le reste de var_static dans line
+	while (var_static[i])
 		line[j++] = var_static[i++];
-	free(var_static); // Libère la mémoire car on a extrait son contenu
-	return (line); // Retourne le reste de var_static
+	free(var_static);
+	return (line);
 }
 
 // Fonction qui extrait la première ligne de var_static
@@ -60,56 +60,55 @@ char	*ft_line(char *var_static)
 	int		i;
 
 	i = 0;
-	if (!var_static[i]) 
+	if (!var_static[i])
 		return (NULL);
-	while (var_static[i] && var_static[i] != '\n') // Recherche le caractère '\n' dans var_static
+	while (var_static[i] && var_static[i] != '\n')
 		i++;
-	line = ft_calloc(sizeof(char), i + 2); // Alloue de la mémoire pour la ligne extraite (en incluant le '\n' si présent)
+	line = ft_calloc(sizeof(char), i + 2);
 	if (!line)
 		return (free(line), free(var_static), NULL);
 	i = 0;
-	while (var_static[i] && var_static[i] != '\n') // Copie le contenu de var_static dans line jusqu'à '\n'
+	while (var_static[i] && var_static[i] != '\n')
 	{
 		line[i] = var_static[i];
 		i++;
 	}
-	if (var_static[i] && var_static[i] == '\n') // Si un '\n' est trouvé, on le copie dans line
+	if (var_static[i] && var_static[i] == '\n')
 		line[i++] = '\n';
-	return (line); // Retourne la ligne extraite
+	return (line);
 }
 
 // Fonction qui lit le fichier et remplit var_static avec le contenu lu
 char	*read_file(int fd, char *var_static, ssize_t	byte_read)
 {
 	char	*var_temp;
-	
-	if (!var_static) // Si var_static est NULL, on l'initialise à une chaîne vide
+
+	if (!var_static)
 	{
-		var_static = ft_calloc(1, 1); // Alloue un seul octet initialisé à '\0'
+		var_static = ft_calloc(1, 1);
 		if (!var_static)
 			return (NULL);
 	}
-	var_temp = ft_calloc(BUFFER_SIZE + 1, sizeof(char)); // Allocation de mémoire pour le buffer temporaire +1 pour le '\0'
+	var_temp = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
 	if (!var_temp)
 		return (NULL);
-	while (byte_read > 0)// Boucle tant qu'on lit des données (byte_read > 0)
+	while (byte_read > 0)
 	{
-		byte_read = read(fd, var_temp, BUFFER_SIZE);// Première lecture dans var_temp avant d'entrer dans la boucle
+		byte_read = read(fd, var_temp, BUFFER_SIZE);
 		if (byte_read == -1 && !var_static)
 			return (free(var_temp), NULL);
-		var_temp[byte_read] = '\0'; // Ajoute un caractère de fin de chaîne
-		var_static = ft_join_and_free(var_static, var_temp); // Concatène et libère var_static
+		var_temp[byte_read] = '\0';
+		var_static = ft_join_and_free(var_static, var_temp);
 		if (!var_static)
 			return (free(var_temp), NULL);
-		if (ft_strchr(var_temp, '\n')) // Vérifie si un saut de ligne est présent dans le buffer
-			break ; // On arrête la lecture dès qu'on trouve un '\n'
+		if (ft_strchr(var_temp, '\n'))
+			break ;
 	}
-	return (free(var_temp), var_static);// Retourne le contenu lu dans var_static
+	return (free(var_temp), var_static);
 }
 
-
 // Fonction principale qui retourne la ligne suivante du fichier
-char    *get_next_line(int fd)
+char	*get_next_line(int fd)
 {
 	static char	*var_static;
 	char		*line;
@@ -120,14 +119,22 @@ char    *get_next_line(int fd)
 	byte_read = 1;
 	var_static = read_file(fd, var_static, byte_read);
 	if (!var_static || !var_static[0])
-		return (free(var_static), var_static = NULL, NULL);
+	{
+		free(var_static);
+		var_static = NULL;
+		return (NULL);
+	}
 	line = ft_line(var_static);
 	if (!line)
-		return (free(var_static), var_static = NULL, NULL);
+	{
+		free(var_static);
+		var_static = NULL;
+		return (NULL);
+	}
 	var_static = ft_next(var_static);
 	return (line);
 }
-
+/*
 #include <stdio.h>
 #include <fcntl.h>
 int main(void)
@@ -143,26 +150,59 @@ int main(void)
     fd2 = open("tests/test2.txt", O_RDONLY);
     fd3 = open("tests/test3.txt", O_RDONLY);
 
+    if (fd1 < 0 || fd2 < 0 || fd3 < 0) {
+        perror("Erreur d'ouverture de fichier");
+        return (1);
+    }
+
     i = 0;
     while (i < 3)
     {
-        // Lit une ligne de chaque fichier et l'affiche
+        // Lire et afficher la ligne de fd1
         line = get_next_line(fd1);
-        printf("line [%02d]: %s", i, line);
-        free(line);
+        if (line)
+        {
+            printf("line [%02d]: %s", i, line);
+            free(line);
+        }
+        else
+            printf("line [%02d]: (NULL)\n", i);
+
+        // Lire et afficher la ligne de fd2
         line = get_next_line(fd2);
-        printf("line [%02d]: %s", i, line);
-        free(line);
+        if (line)
+        {
+            printf("line [%02d]: %s", i, line);
+            free(line);
+        }
+        else
+            printf("line [%02d]: (NULL)\n", i);
+
+        // Lire et afficher la ligne de fd3
         line = get_next_line(fd3);
-        printf("line [%02d]: %s", i, line);
-        free(line);
+        if (line)
+        {
+            printf("line [%02d]: %s", i, line);
+            free(line);
+        }
+        else
+            printf("line [%02d]: (NULL)\n", i);
+
         i++;
     }
 
-    // Ferme les fichiers
+    // Fermer les fichiers
     close(fd1);
     close(fd2);
     close(fd3);
 
+	// Après la boucle while et avant return(0);
+	while ((line = get_next_line(fd1)) != NULL)
+		free(line);
+	while ((line = get_next_line(fd2)) != NULL)
+		free(line);
+	while ((line = get_next_line(fd3)) != NULL)
+		free(line);
+
     return (0);
-}
+}*/
