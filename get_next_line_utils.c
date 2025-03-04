@@ -68,7 +68,6 @@ char	*ft_strchr(const char *s, int c)
 }
 
 //alloue un bloc de mémoire en initialisant tous ces octets à la valeur 0.
-// Cette fonction alloue un bloc de mémoire en initialisant tous ces octets à la valeur 0.
 void	*ft_calloc(size_t nmemb, size_t size)
 {
 	int		c;
