@@ -66,20 +66,6 @@ char	*ft_strchr(const char *s, int c)
 	else
 		return (NULL);
 }
-/*
-// La fonction bzero () doit placer n octets de valeur zéro dans la zone pointée par s.
-void	ft_bzero(void *s, size_t n)
-{
-	size_t	i;
-
-	i = 0;
-	while (i < n) // Remplir les n premiers octets de s avec 0
-	{
-		*(unsigned char *)(s + i) = 0; // Cast et mettre à zéro
-		i++;
-	}
-}
-*/
 // Cette fonction alloue un bloc de mémoire en initialisant tous ces octets à la valeur 0.
 void	*ft_calloc(size_t nmemb, size_t size)
 {
@@ -107,4 +93,3 @@ void	*ft_calloc(size_t nmemb, size_t size)
 	}
 	return (ptr);
 }
-
