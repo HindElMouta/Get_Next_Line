@@ -1,3 +1,0 @@
-ligne A
-ligne B
-ligne C
