@@ -18,14 +18,14 @@ char	*ft_join_and_free(char *var_static, char *var_temp)
 {
 	char	*temp;
 
-	if (!var_temp) // Si la chaîne temporaire est NULL (erreur de lecture ou vide)
-		return (free(var_static), NULL); // Libère var_static et retourne NULL
+	if (!var_temp) 
+		return (free(var_static), NULL); 
 	else if (!var_static) // Si var_static est NULL (première allocation)
 		return (NULL);
 	temp = ft_strjoin(var_static, var_temp); // Concatène var_static et var_temp
-	if (!temp) // Si la concaténation échoue (problème mémoire)
-		return (free(var_static), NULL); // Libère var_static et retourne NULL
-	return (free(var_static), temp); // Libère var_static et retourne la chaîne concaténée
+	if (!temp) 
+		return (free(var_static), NULL);
+	return (free(var_static), temp);
 }
 
 // Fonction qui supprime la première ligne de var_static et retourne le reste
@@ -35,8 +35,8 @@ char	*ft_next(char *var_static)
 	int		j;
 	char	*line;
 
-	if (!var_static) // Vérifie si var_static est vide
-		return (NULL); // Retourne NULL si rien à traiter
+	if (!var_static)
+		return (NULL);
 	i = 0;
 	while (var_static[i] && var_static[i] != '\n') // Trouve l'index du premier '\n'
 		i++;
@@ -60,12 +60,12 @@ char	*ft_line(char *var_static)
 	int		i;
 
 	i = 0;
-	if (!var_static[i]) // Si var_static est vide
-		return (NULL); // Retourne NULL
+	if (!var_static[i])
+		return (NULL);
 	while (var_static[i] && var_static[i] != '\n') // Cherche jusqu'à '\n'
 		i++;
 	line = ft_calloc(sizeof(char), i + 2); // Alloue de la mémoire pour la ligne
-	if (!line) // Si l'allocation échoue
+	if (!line)
 		return (free(line), free(var_static), NULL); // Libère tout et retourne NULL
 	i = 0;
 	while (var_static[i] && var_static[i] != '\n') // Copie les caractères avant '\n'
