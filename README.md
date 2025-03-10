@@ -1,4 +1,23 @@
-Gestion de la mémoire (Heap vs Stack) :
+# 📝 get_next_line
+
+## 📌 Description
+`get_next_line` est une fonction qui permet de lire un fichier ligne par ligne, en conservant en mémoire les données restantes entre chaque appel. Elle est particulièrement utile pour traiter de gros fichiers sans tout charger en mémoire.
+
+## 🚀 Fonctionnalités
+- Lit un fichier **ligne par ligne**.
+- Gère un **buffer dynamique** pour optimiser la lecture.
+- Prend en charge les **fichiers standards** et l'entrée **stdin**.
+- Supporte plusieurs **file descriptors** en simultané (bonus).
+- Assure une **gestion mémoire sécurisée**.
+
+## 🛠️ Compilation
+Pour utiliser `get_next_line`, compile-le avec ton fichier principal :
+
+```sh
+gcc -Wall -Wextra -Werror -D BUFFER_SIZE=42 get_next_line
+
+
+## Gestion de la mémoire (Heap vs Stack) :
 
     La mémoire stack est utilisée pour les variables locales dans les fonctions. Par exemple, dans le code, int i; dans les fonctions comme ft_next, ft_line, etc., est alloué sur la pile.
     La mémoire heap est utilisée pour allouer dynamiquement des blocs de mémoire avec malloc, calloc, etc. Par exemple, lorsque tu utilises malloc dans ft_strjoin, ft_calloc, et dans read_file pour allouer des espaces pour les buffers et les lignes, tu utilises la mémoire heap.
